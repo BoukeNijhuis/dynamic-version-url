@@ -21,6 +21,15 @@ public class GetVersionController {
         return ResponseEntity.ok("a1");
     }
 
+//    @GetMapping(path = "v${version}/a")
+//    private ResponseEntity<String> a(@PathVariable int version) {
+//        if (version == 1) return a1();
+//        if (version > 1) return a2();
+//
+//        return ResponseEntity.ok("a");
+//    }
+
+
     /////////////////////////////////////////////
 
     @GetVersionMapping(path = "/b", versions = {OLDEST_VERSION, 3})
@@ -40,7 +49,7 @@ public class GetVersionController {
         return ResponseEntity.ok("b7");
     }
 
-    @GetVersionMapping(path = "/c", versions = {OLDEST_VERSION, LATEST_VERSION})
+    @GetVersionMapping(path = "/c", versions = {OLDEST_VERSION, 9})
     private ResponseEntity<String> c() {
         return ResponseEntity.ok("c");
     }

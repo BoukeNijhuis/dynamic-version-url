@@ -14,10 +14,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @RequestMapping(
-        method = {RequestMethod.GET}
+        method = {RequestMethod.POST}
 )
 @VersionMapping
-public @interface GetVersionMapping {
+public @interface PostVersionMapping {
 
     int[] versions();
 
@@ -56,3 +56,4 @@ public @interface GetVersionMapping {
     )
     String[] produces() default {};
 }
+

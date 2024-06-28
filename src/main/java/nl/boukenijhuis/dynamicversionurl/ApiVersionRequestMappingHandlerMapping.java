@@ -1,9 +1,11 @@
 package nl.boukenijhuis.dynamicversionurl;
 
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,10 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
     protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
 
         RequestMappingInfo info = super.getMappingForMethod(method, handlerType);
+
+        Annotation vehicleAnnotation = AnnotationUtils.findAnnotation (method, GetVersionMapping.class);
+
+
 
         // update the paths when necessary
         if (method.isAnnotationPresent(GetVersionMapping.class)) {
