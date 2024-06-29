@@ -47,21 +47,29 @@ class VersionControllerTest {
 
     @Test
     public void testC() throws Exception {
-        testEndpoint("/api/v1/c", "c");
-        testEndpoint("/api/v2/c", "c");
-        testEndpoint("/api/v3/c", "c");
-        testEndpoint("/api/v4/c", "c");
-        testEndpoint("/api/v5/c", "c");
-        testEndpoint("/api/v6/c", "c");
-        testEndpoint("/api/v7/c", "c");
-        testEndpoint("/api/v8/c", "c");
-        testEndpoint("/api/v9/c", "c");
+        testEndpoint("/api/v1/c", "c1");
+        testEndpoint("/api/v2/c", "c1");
+        testEndpoint("/api/v3/c", "c1");
+        testEndpoint("/api/v4/c", "c1");
+        testEndpoint("/api/v5/c", "c1");
+        testEndpoint("/api/v6/c", "c1");
+        testEndpoint("/api/v7/c", "c1");
+        testEndpoint("/api/v8/c", "c1");
+        testEndpoint("/api/v9/c", "c1");
     }
 
-    private void testEndpoint(String path, String number) throws Exception {
+    @Test
+    public void testEndpointWithoutVersioning() throws Exception {
+        mockMvc.perform(get("/api/d"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("d"))
+                .andReturn();
+    }
+
+    private void testEndpoint(String path, String response) throws Exception {
         mockMvc.perform(get(path))
                 .andExpect(status().isOk())
-                .andExpect(content().string(number))
+                .andExpect(content().string(response))
                 .andReturn();
     }
 }

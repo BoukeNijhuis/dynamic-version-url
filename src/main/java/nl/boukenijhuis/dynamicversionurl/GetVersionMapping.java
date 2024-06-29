@@ -16,10 +16,10 @@ import java.lang.annotation.Target;
 @RequestMapping(
         method = {RequestMethod.GET}
 )
-@VersionMapping
+@VersionMapping(GetVersionMapping.class)
 public @interface GetVersionMapping {
 
-    int[] versions();
+    int[] versions() default {1, 1};
 
     @AliasFor(
             annotation = RequestMapping.class
@@ -56,3 +56,4 @@ public @interface GetVersionMapping {
     )
     String[] produces() default {};
 }
+

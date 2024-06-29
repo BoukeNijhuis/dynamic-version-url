@@ -16,10 +16,10 @@ import java.lang.annotation.Target;
 @RequestMapping(
         method = {RequestMethod.PUT}
 )
-@VersionMapping
+@VersionMapping(PutVersionMapping.class)
 public @interface PutVersionMapping {
 
-    int[] versions();
+    int[] versions() default {1, 1};
 
     @AliasFor(
             annotation = RequestMapping.class

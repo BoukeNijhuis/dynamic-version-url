@@ -1,6 +1,7 @@
 package nl.boukenijhuis.dynamicversionurl;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class GetVersionController {
 
     public static final int OLDEST_VERSION = 1;
-    public static final int LATEST_VERSION = 9;
+    public static final int NEWEST_VERSION = 9;
 
-    @GetVersionMapping(path = "/a", versions = {2, LATEST_VERSION} )
+    @GetVersionMapping(path = "/a", versions = {2, NEWEST_VERSION} )
     private ResponseEntity<String> a2() {
         return ResponseEntity.ok("a2");
     }
@@ -20,15 +21,6 @@ public class GetVersionController {
     private ResponseEntity<String> a1() {
         return ResponseEntity.ok("a1");
     }
-
-//    @GetMapping(path = "v${version}/a")
-//    private ResponseEntity<String> a(@PathVariable int version) {
-//        if (version == 1) return a1();
-//        if (version > 1) return a2();
-//
-//        return ResponseEntity.ok("a");
-//    }
-
 
     /////////////////////////////////////////////
 
@@ -42,15 +34,23 @@ public class GetVersionController {
         return ResponseEntity.ok("b4");
     }
 
-    /////////////////////////////////////////////
-
-    @GetVersionMapping(path = "/b", versions = {7, LATEST_VERSION})
+    @GetVersionMapping(path = "/b", versions = {7, NEWEST_VERSION})
     private ResponseEntity<String> b7() {
         return ResponseEntity.ok("b7");
     }
 
+    /////////////////////////////////////////////
+
     @GetVersionMapping(path = "/c", versions = {OLDEST_VERSION, 9})
-    private ResponseEntity<String> c() {
-        return ResponseEntity.ok("c");
+    private ResponseEntity<String> c1() {
+        return ResponseEntity.ok("c1");
+    }
+
+    /////////////////////////////////////////////
+
+    // mapping without version
+    @GetMapping(path = "/d")
+    private ResponseEntity<String> d() {
+        return ResponseEntity.ok("d");
     }
 }

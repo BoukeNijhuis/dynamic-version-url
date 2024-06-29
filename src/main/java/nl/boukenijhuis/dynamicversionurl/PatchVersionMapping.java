@@ -16,10 +16,10 @@ import java.lang.annotation.Target;
 @RequestMapping(
         method = {RequestMethod.PATCH}
 )
-@VersionMapping
+@VersionMapping(PatchVersionMapping.class)
 public @interface PatchVersionMapping {
 
-    int[] versions();
+    int[] versions() default {1, 1};
 
     @AliasFor(
             annotation = RequestMapping.class

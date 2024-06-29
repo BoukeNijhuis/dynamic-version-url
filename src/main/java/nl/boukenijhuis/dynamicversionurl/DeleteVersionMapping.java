@@ -16,10 +16,10 @@ import java.lang.annotation.Target;
 @RequestMapping(
         method = {RequestMethod.DELETE}
 )
-@VersionMapping
+@VersionMapping(DeleteVersionMapping.class)
 public @interface DeleteVersionMapping {
 
-    int[] versions();
+    int[] versions() default {1, 1};
 
     @AliasFor(
             annotation = RequestMapping.class
