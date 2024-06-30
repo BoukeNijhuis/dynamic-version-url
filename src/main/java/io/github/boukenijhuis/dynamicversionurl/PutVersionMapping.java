@@ -1,4 +1,4 @@
-package nl.boukenijhuis.dynamicversionurl;
+package io.github.boukenijhuis.dynamicversionurl;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +14,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @RequestMapping(
-        method = {RequestMethod.GET}
+        method = {RequestMethod.PUT}
 )
-@VersionMapping(GetVersionMapping.class)
-public @interface GetVersionMapping {
+@VersionMapping(PutVersionMapping.class)
+public @interface PutVersionMapping {
 
     int[] versions() default {1, 1};
 

@@ -1,4 +1,4 @@
-package nl.boukenijhuis.dynamicversionurl;
+package io.github.boukenijhuis.dynamicversionurl;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;

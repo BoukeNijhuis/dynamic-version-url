@@ -1,4 +1,4 @@
-package nl.boukenijhuis.dynamicversionurl;
+package io.github.boukenijhuis.dynamicversionurl;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

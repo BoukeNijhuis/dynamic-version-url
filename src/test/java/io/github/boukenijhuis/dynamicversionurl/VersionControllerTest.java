@@ -1,4 +1,4 @@
-package nl.boukenijhuis.dynamicversionurl;
+package io.github.boukenijhuis.dynamicversionurl;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
