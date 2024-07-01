@@ -53,4 +53,12 @@ public class GetVersionController {
     private ResponseEntity<String> d() {
         return ResponseEntity.ok("d");
     }
+
+    @GetVersionMapping(value = "/single-version", versions = 1)
+    private ResponseEntity<String> singleVersion() {
+        return ResponseEntity.ok("single-version");
+    }
+
+    // TODO introduce test that checks for three or more versions (how???)
+
 }

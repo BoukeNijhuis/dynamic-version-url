@@ -66,6 +66,14 @@ class VersionControllerTest {
                 .andReturn();
     }
 
+    @Test
+    public void testEndpointWithSingleVersion() throws Exception {
+        mockMvc.perform(get("/api/v1/single-version"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("single-version"))
+                .andReturn();
+    }
+
     private void testEndpoint(String path, String response) throws Exception {
         mockMvc.perform(get(path))
                 .andExpect(status().isOk())
