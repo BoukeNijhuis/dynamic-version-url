@@ -20,12 +20,21 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
         this.prefix = prefix;
     }
 
+    /***
+     * Creates an updated request mapping info object. This used to map an URL to a Java method. It is updated in
+     * such a way that it supports specified version numbers.
+     * @param method the method that will be mapped to
+     * @param handlerType the class where the method is found
+     * @return the updated request mapping info object
+     */
     @Override
     @Nullable
     protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
 
+        // get the exiting request mapping info
         RequestMappingInfo info = super.getMappingForMethod(method, handlerType);
 
+        // find the version mapping annotation
         VersionMapping versionMapping = AnnotationUtils.findAnnotation(method, VersionMapping.class);
 
         if (versionMapping != null) {
@@ -35,7 +44,6 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
             // ugly if statement, because annotations do not use inheritance
             if (versionMapping.value().equals(GetVersionMapping.class)) {
                 GetVersionMapping annotation = method.getAnnotation(GetVersionMapping.class);
-                // TODO introduce generic class that holds method, versions, paths and send this to updatePaths
                 versions = annotation.versions();
                 paths = returnValueOrPath(annotation.value(), annotation.path());
             } else if (versionMapping.value().equals(PostVersionMapping.class)) {
@@ -67,12 +75,25 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
         return info;
     }
 
+    /***
+     * Returns the path array if it contains values, otherwise it will return the value array.
+     * @param value the value array (from a RequestMapping)
+     * @param path the path array (from a RequestMapping)
+     * @return the path array if it contains values, otherwise the value array
+     */
     private String[] returnValueOrPath(String[] value, String[] path) {
         if (path != null && path.length > 0) {
             return path;
         } else return value;
     }
 
+    /***
+     * Calculates the dynamic URLs based upon exiting patternValues, versions and paths.
+     * @param patternValues the existing patternValues calculated by Spring Boot.
+     * @param versions the versions (as specified by the annotation)
+     * @param paths the paths (as specified by the annotation)
+     * @return
+     */
     private String[] updatePaths(Set<String> patternValues, @NonNull int[] versions, @NonNull String[] paths) {
 
         List<String> versionedPaths = new ArrayList<>();
