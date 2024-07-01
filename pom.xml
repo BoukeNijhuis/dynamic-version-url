@@ -5,7 +5,7 @@
 
     <groupId>io.github.boukenijhuis</groupId>
     <artifactId>dynamic-version-url</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 
     <name>dynamic-version-url</name>
     <description>dynamic-version-url</description>

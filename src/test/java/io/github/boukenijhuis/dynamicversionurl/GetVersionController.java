@@ -61,4 +61,6 @@ public class GetVersionController {
 
     // TODO introduce test that checks for three or more versions (how???)
 
+    // TODO add test to check the content of the five <METHOD>VersionMapping.java files, they should be really similar.
+
 }

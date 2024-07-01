@@ -19,7 +19,11 @@ import java.lang.annotation.Target;
 @VersionMapping(DeleteVersionMapping.class)
 public @interface DeleteVersionMapping {
 
-    int[] versions() default {1, 1};
+    @AliasFor("versions")
+    int[] version() default 1;
+
+    @AliasFor("version")
+    int[] versions() default 1;
 
     @AliasFor(
             annotation = RequestMapping.class
