@@ -6,10 +6,12 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
@@ -38,34 +40,16 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
         VersionMapping versionMapping = AnnotationUtils.findAnnotation(method, VersionMapping.class);
 
         if (versionMapping != null) {
-            int[] versions = null;
-            String[] paths = null;
 
-            // ugly if statement, because annotations do not use inheritance
-            if (versionMapping.value().equals(GetVersionMapping.class)) {
-                GetVersionMapping annotation = method.getAnnotation(GetVersionMapping.class);
-                versions = annotation.versions();
-                paths = returnValueOrPath(annotation.value(), annotation.path());
-            } else if (versionMapping.value().equals(PostVersionMapping.class)) {
-                PostVersionMapping annotation = method.getAnnotation(PostVersionMapping.class);
-                versions = annotation.versions();
-                paths = returnValueOrPath(annotation.value(), annotation.path());
-            } else if (versionMapping.value().equals(PutVersionMapping.class)) {
-                PutVersionMapping annotation = method.getAnnotation(PutVersionMapping.class);
-                versions = annotation.versions();
-                paths = returnValueOrPath(annotation.value(), annotation.path());
-            } else if (versionMapping.value().equals(DeleteVersionMapping.class)) {
-                DeleteVersionMapping annotation = method.getAnnotation(DeleteVersionMapping.class);
-                versions = annotation.versions();
-                paths = returnValueOrPath(annotation.value(), annotation.path());
-            } else if (versionMapping.value().equals(PatchVersionMapping.class)) {
-                PatchVersionMapping annotation = method.getAnnotation(PatchVersionMapping.class);
-                versions = annotation.versions();
-                paths = returnValueOrPath(annotation.value(), annotation.path());
-            }
+            Annotation annotation = method.getAnnotation(versionMapping.value());
+            Map<String, Object> annotationAttributes = AnnotationUtils.getAnnotationAttributes(annotation);
+            int[] versions = (int[]) annotationAttributes.get("versions");
+            String[] value = (String[]) annotationAttributes.get("value");
+            String[] path = (String[]) annotationAttributes.get("path");
+            path = returnValueOrPath(value, path);
 
             if (info != null && versions != null) {
-                String[] versionPaths = updatePaths(info.getPatternValues(), versions, paths);
+                String[] versionPaths = updatePaths(info.getPatternValues(), versions, path, versionMapping.value());
                 // update the request mapping info
                 info = info.mutate().paths(versionPaths).build();
             }
@@ -92,29 +76,15 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
      * @param patternValues the existing patternValues calculated by Spring Boot.
      * @param versions the versions (as specified by the annotation)
      * @param paths the paths (as specified by the annotation)
-     * @return
+     * @param clazz the annotation where version and path were specified
+     * @return the updated patternValues
      */
-    private String[] updatePaths(Set<String> patternValues, @NonNull int[] versions, @NonNull String[] paths) {
+    private String[] updatePaths(Set<String> patternValues, @NonNull int[] versions, @NonNull String[] paths, Class<? extends Annotation> clazz) {
 
         List<String> versionedPaths = new ArrayList<>();
 
         int oldestVersion = versions[0];
-        int newestVersion;
-
-        // only one version specified
-        if (versions.length == 1) {
-            newestVersion = versions[0];
-        }
-        // multiple versions specified
-        else if (versions.length == 2){
-            newestVersion = versions[1];
-        }
-        // too many versions specified
-        else {
-            // TODO add the request method
-            String message = String.format("Too many versions (%s) specified on %s.", Arrays.toString(versions), Arrays.toString(paths));
-            throw new RuntimeException(message);
-        }
+        int newestVersion = getNewestVersion(versions, paths, clazz);
 
         // for every version
         for (int version = oldestVersion; version <= newestVersion; version++) {
@@ -134,5 +104,32 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
         // return the array with versioned paths
         return versionedPaths.toArray(new String[0]);
 
+    }
+
+    /***
+     * Get the newest version. This depends on the number of versions. Throws an exception when there are more
+     * than two versions.
+     * @param versions the versions from the annotation
+     * @param path the path from the annotation
+     * @param clazz the class of the annotation
+     * @return the newest version
+     */
+    private static int getNewestVersion(int[] versions, String[] path, Class<? extends Annotation> clazz) {
+        int newestVersion;
+        // only one version specified
+        if (versions.length == 1) {
+            newestVersion = versions[0];
+        }
+        // multiple versions specified
+        else if (versions.length == 2) {
+            newestVersion = versions[1];
+        }
+        // too many versions specified
+        else {
+            String message = String.format("Too many versions (%s) specified on @%s with path %s.",
+                    Arrays.toString(versions), clazz.toString(), Arrays.toString(path));
+            throw new RuntimeException(message);
+        }
+        return newestVersion;
     }
 }
