@@ -9,42 +9,49 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 public class ReadMeController {
 
-//    @GetMapping("/v1/random")
-//    public String random1() {
-//        return String.format("%s", Math.random());
+//    @GetMapping("/v1/a")
+//    public String a1() {
+//        return "a1";
 //    }
 //
-//    @GetMapping("/v2/random")
-//    public String random2() {
-//        return String.format("Random number: %s", Math.random());
+//    @GetMapping("/v2/a")
+//    public String a2() {
+//        return "a2";
 //    }
-
-//    @GetMapping("/v{version}/random")
-//    public String random2(@PathVariable int version) {
+//
+//    @GetMapping("/v{version}/a")
+//    public String a(@PathVariable int version) {
 //        return switch (version) {
-//            case 1 -> random1();
-//            default -> random2();
+//            case 1 -> a1();
+//            default -> a2();
 //        };
 //    }
 
-//    @GetVersionMapping(value = "/random", version = 1)
-//    public String random1() {
-//        return String.format("%s", Math.random());
+//    @GetVersionMapping(value = "/a", version = 1)
+//    public String a1() {
+//        return "a1";
 //    }
 //
-//    @GetVersionMapping(value = "/random", version = 2)
-//    public String random2() {
-//        return String.format("Random number: %s", Math.random());
+//    @GetVersionMapping(value = "/a", version = 2)
+//    public String a2() {
+//        return "a2";
 //    }
 
-    @GetVersionMapping(value = "/random", versions = {1, 10})
-    public String random1() {
-        return String.format("%s", Math.random());
-    }
+//    @GetVersionMapping(value = "/a", versions = {1, 10})
+//    public String a1() {
+//        return "a1";
+//    }
+//
+//    @GetVersionMapping(value = "/a", versions = {11, 20})
+//    public String a11() {
+//        return "a11";
+//    }
 
-    @GetVersionMapping(value = "/random", versions = {11, 20})
-    public String random11() {
-        return String.format("Random number: %s", Math.random());
+    private static final int LATEST_VERSION = 10;
+
+    @GetVersionMapping(value = "/a", versions = {1, LATEST_VERSION})
+    public String a() {
+        return "a";
     }
 
 }
