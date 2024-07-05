@@ -21,7 +21,7 @@ class ReadMeControllerTest {
 
     @Test
     public void testEndpointWithoutVersioning() throws Exception {
-        mockMvc.perform(get("/v1/random"))
+        mockMvc.perform(get("/v1/a"))
                 .andExpect(status().isOk());
     }
 
