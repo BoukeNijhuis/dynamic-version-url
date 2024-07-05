@@ -24,7 +24,7 @@ public class GetVersionController {
 
     /////////////////////////////////////////////
 
-    @GetVersionMapping(path = "/b", versions = {OLDEST_VERSION, 3})
+    @GetVersionMapping(path = "/b", versions = {OLDEST_VERSION, 4})
     private ResponseEntity<String> b1() {
         return ResponseEntity.ok("b1");
     }
