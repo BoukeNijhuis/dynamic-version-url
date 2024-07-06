@@ -160,14 +160,15 @@ Start adding the new versioned annotations to your project. See [Best solution](
 
 # Reference
 
+- copy of existing mapping annotation
 - optional prefix string for version numbers
 - the following request method is supported: GET, POST, PUT, DELETE, PATCH
 - version vs versions
 - default version
 
 Errors:
-- overlapping version numbers
-- more than two version numbers
+- overlapping version numbers -> Request processing failed: java.lang.IllegalStateException: Ambiguous handler methods mapped for 'URL': { METHODS }
+- more than two version numbers -> Too many versions (VERSIONS) specified on ANNOTATION with path PATH.
 
 
 # Best practice
