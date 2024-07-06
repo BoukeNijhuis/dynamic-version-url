@@ -1,5 +1,6 @@
 package io.github.boukenijhuis.dynamicversionurl.readme;
 
+import io.github.boukenijhuis.dynamicversionurl.WebMvcConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /***
  * This class is used to test the code samples in the README.md.
  */
-@SpringBootTest
+@SpringBootTest(classes = {WebMvcConfig.class, ReadMeController.class})
 @AutoConfigureMockMvc
 class ReadMeControllerTest {
 

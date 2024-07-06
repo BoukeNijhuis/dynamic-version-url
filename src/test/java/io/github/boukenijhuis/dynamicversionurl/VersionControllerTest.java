@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest
+@SpringBootTest(classes = {WebMvcConfig.class, GetVersionController.class})
 @AutoConfigureMockMvc
 class VersionControllerTest {
 
