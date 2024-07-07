@@ -166,8 +166,10 @@ Start adding the new versioned annotations to your project. See [Best solution](
 - version vs versions
 - default version
 
+The range mechanism breaks the Spring boot mechanism that checks for ambiguous mappings. Therefor it will not detect overlapping version ranges. It does work for single version mappings, but not for ranged versions mappings. The reason that is does not work is the fact that the check only expects single version mappings. Which is logical because vanilla Spring does not know about ranged versions.
+
 Errors:
-- overlapping version numbers -> Request processing failed: java.lang.IllegalStateException: Ambiguous handler methods mapped for 'URL': { METHODS }
+- overlapping version numbers -> Ambiguous version mapping found with the following URL: URL
 - more than two version numbers -> Too many versions (VERSIONS) specified on ANNOTATION with path PATH.
 
 

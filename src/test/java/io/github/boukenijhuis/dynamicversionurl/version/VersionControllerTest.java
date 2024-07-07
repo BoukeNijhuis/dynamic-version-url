@@ -1,5 +1,6 @@
-package io.github.boukenijhuis.dynamicversionurl;
+package io.github.boukenijhuis.dynamicversionurl.version;
 
+import io.github.boukenijhuis.dynamicversionurl.WebMvcConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
