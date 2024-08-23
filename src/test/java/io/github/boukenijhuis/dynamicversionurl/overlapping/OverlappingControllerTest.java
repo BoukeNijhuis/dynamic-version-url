@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OverlappingControllerTest {
 
-    // this test is a little flaky
     @Test
     public void testEndpointWithOverlappingVersioning() {
 
@@ -20,6 +19,6 @@ class OverlappingControllerTest {
             ApplicationContext app = SpringApplication.run(classes, new String[]{});
         });
 
-        assertEquals("Ambiguous version mapping found with the following URL: /v3/a", exception.getMessage());
+        assertEquals("Ambiguous version mapping found with the following URL: /v3/overlap", exception.getMessage());
     }
 }

@@ -31,11 +31,18 @@ public class VersionOverlapChecker implements ApplicationListener<ContextRefresh
     }
 
     private static void findDuplicate(PathPattern pathPattern, HashSet<String> patterns) {
-        boolean success = patterns.add(pathPattern.getPatternString());
-        if (!success) {
-            // duplicate found
-            String message = String.format("Ambiguous version mapping found with the following URL: %s", pathPattern);
-            throw new RuntimeException(message);
+        // sometimes /error comes in more than once, but we are not interested in that url
+        if (doesNotEqualError(pathPattern)) {
+            boolean success = patterns.add(pathPattern.getPatternString());
+            if (!success) {
+                // duplicate found
+                String message = String.format("Ambiguous version mapping found with the following URL: %s", pathPattern);
+                throw new RuntimeException(message);
+            }
         }
+    }
+
+    private static boolean doesNotEqualError(PathPattern pathPattern) {
+        return !pathPattern.getPatternString().equals("/error");
     }
 }
