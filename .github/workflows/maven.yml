@@ -33,3 +33,5 @@ jobs:
         run: mvn -Ppublication
       - name: JReleaser
         run: mvn jreleaser:deploy
+        env:
+          JRELEASER_GITHUB_TOKEN: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
