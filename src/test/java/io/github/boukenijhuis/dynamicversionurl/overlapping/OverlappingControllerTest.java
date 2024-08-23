@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OverlappingControllerTest {
 
+    // this test is a little flaky
     @Test
     public void testEndpointWithOverlappingVersioning() {
 

@@ -93,8 +93,10 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
                 // for every pattern value (from the existing request mapping info)
                 for (String patternValue : patternValues) {
                     // TODO add a way to postfix the version number (default to prefix)
+                    // escape accolades from path variables
+                    String escapedAnnotationPath = annotationPath.replace("{", "\\{").replace("}", "\\}");
                     String replacement = "/" + prefix + version + annotationPath;
-                    String versionedPath = patternValue.replaceFirst(annotationPath + "$", replacement);
+                    String versionedPath = patternValue.replaceFirst(escapedAnnotationPath + "$", replacement);
                     versionedPaths.add(versionedPath);
                 }
         }

@@ -51,7 +51,7 @@ A simple, but verbose solution for this problem is the following approach:
 
 A @PathVariable is introduced, and now we use a switch expression to get the right response for the requested version. The default branch is always used for the latest version. This way we can relatively easy add versions without a lot of duplication. Please notice that we have to introduce the PathVariable and the switch expression for every other endpoint as well. So still a lot of work! But luckily this is a one time operation.
 
-Once every endpoint has this mechanism in place it works and it has the first four characteristics. It does not really have the fifth characteristic, because this solution introduces quit some extra code. It needs a PathVariable in the URL and as argument of the method. Furthermore, it introduces a switch expression. 
+Once every endpoint has this mechanism in place it works and it has the first four characteristics. It does not really have the fifth characteristic, because this solution introduces quite some extra code. It needs a PathVariable in the URL and as argument of the method. Furthermore, it introduces a switch expression. 
 
 # Better solution
 
@@ -173,10 +173,12 @@ Errors:
 - more than two version numbers -> Too many versions (VERSIONS) specified on ANNOTATION with path PATH.
 
 
-# Best practice
+# Migration guid
 
-- start with add 'Version' to the annotation
-- specify the version
+- add library to POM
+- add a custom mapping handler
+- add 'Version' in the annotation name
+- add the version attribute in the annotation
 - postfix method names with the first version
 - start using ranges
 - use a constant to denote the newest version (with example)

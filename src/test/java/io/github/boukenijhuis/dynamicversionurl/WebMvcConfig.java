@@ -6,6 +6,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 @Configuration
 public class WebMvcConfig extends DelegatingWebMvcConfiguration {
+
     @Override
     public RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
         return new ApiVersionRequestMappingHandlerMapping("v");
