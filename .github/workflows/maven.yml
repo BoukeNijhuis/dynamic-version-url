@@ -37,6 +37,7 @@ jobs:
         run: |
           git config --global user.email "bouke.nijhuis@gmail.com"
           git config --global user.name "Bouke Nijhuis"
+          git add pom.xml
           git commit -m "version increase"
           git push
       - name: JReleaser
