@@ -94,6 +94,7 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
                 for (String patternValue : patternValues) {
                     // TODO add a way to postfix the version number (default to prefix)
                     // escape accolades from path variables
+                    // TODO should we escape more special characters?
                     String escapedAnnotationPath = annotationPath.replace("{", "\\{").replace("}", "\\}");
                     String replacement = "/" + prefix + version + annotationPath;
                     String versionedPath = patternValue.replaceFirst(escapedAnnotationPath + "$", replacement);
