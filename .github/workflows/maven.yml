@@ -33,10 +33,12 @@ jobs:
         run: mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion} versions:commit
       - name: Maven publication
         run: mvn -Ppublication
-      - name: Testing git commit
-        run: git commit -m "version increase"
-      - name: Testing git push
-        run: git push
+      - name: Testing git commit & push
+        run: |
+          git config --global user.email "bouke.nijhuis@gmail.com"
+          git config --global user.name "Bouke Nijhuis"
+          git commit -m "version increase"
+          git push
       - name: JReleaser
         run: mvn jreleaser:deploy
         env:
