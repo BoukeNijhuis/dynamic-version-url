@@ -134,25 +134,13 @@ For Gradle add the following line:
 
 Please check if the version in the dependency above is the latest version!
 
-## Add a custom mapping handler
+## Change the version prefix string
 
-Add the following class to your project:
+By default, the version is prefixed with the character 'v'. You can override this with the following property: 
+  
+    version.prefix
 
-    import org.springframework.context.annotation.Configuration;
-    import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
-    import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-    
-    @Configuration
-    public class WebMvcConfig extends DelegatingWebMvcConfiguration 
-    {
-        @Override
-        public RequestMappingHandlerMapping createRequestMappingHandlerMapping() 
-        {
-            return new ApiVersionRequestMappingHandlerMapping("v");
-        }
-    }
-
-The name of the class can be changed to your liking. For more information about the "v" parameter, please check the [Reference](#Reference) section. 
+This can be done in the application.properties in the resources directory.
 
 ## Add new annotations
 
