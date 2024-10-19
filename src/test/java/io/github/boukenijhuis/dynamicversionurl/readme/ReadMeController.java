@@ -1,6 +1,6 @@
 package io.github.boukenijhuis.dynamicversionurl.readme;
 
-import io.github.boukenijhuis.dynamicversionurl.GetVersionMapping;
+import io.github.boukenijhuis.dynamicversionurl.annotation.GetVersionMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /***

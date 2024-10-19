@@ -8,11 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
@@ -36,12 +32,11 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
         // get the exiting request mapping info
         RequestMappingInfo info = super.getMappingForMethod(method, handlerType);
 
-        // find the version mapping annotation
-        VersionMapping versionMapping = AnnotationUtils.findAnnotation(method, VersionMapping.class);
+        // find the first version mapping annotation
+        Annotation annotation = getFirstVersionAnnotation(method);
 
-        if (versionMapping != null) {
+        if (annotation != null) {
 
-            Annotation annotation = method.getAnnotation(versionMapping.value());
             Map<String, Object> annotationAttributes = AnnotationUtils.getAnnotationAttributes(annotation);
             int[] versions = (int[]) annotationAttributes.get("versions");
             String[] value = (String[]) annotationAttributes.get("value");
@@ -49,7 +44,7 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
             path = returnValueOrPath(value, path);
 
             if (info != null && versions != null) {
-                String[] versionPaths = updatePaths(info.getPatternValues(), versions, path, versionMapping.value());
+                String[] versionPaths = updatePaths(info.getPatternValues(), versions, path, annotation.getClass());
                 // update the request mapping info
                 info = info.mutate().paths(versionPaths).build();
             }
@@ -57,6 +52,24 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
 
         // always return info
         return info;
+    }
+
+    /**
+     * Find the first version annotation on a given method.
+     * @param method the method that is checked for the first version annotation
+     * @return the first version annotation or null (when not found)
+     */
+    private Annotation getFirstVersionAnnotation(Method method) {
+        Annotation[] declaredAnnotations = method.getDeclaredAnnotations();
+        for (Annotation annotation : declaredAnnotations) {
+            String packageName = annotation.annotationType().getPackageName();
+            if (packageName.startsWith(getClass().getPackageName())) {
+                return annotation;
+            }
+        }
+
+        // no version annotation found
+        return null;
     }
 
     /***

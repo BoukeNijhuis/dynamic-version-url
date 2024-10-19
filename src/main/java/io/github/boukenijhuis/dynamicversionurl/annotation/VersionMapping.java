@@ -1,4 +1,4 @@
-package io.github.boukenijhuis.dynamicversionurl;
+package io.github.boukenijhuis.dynamicversionurl.annotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
