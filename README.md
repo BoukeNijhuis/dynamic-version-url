@@ -132,7 +132,7 @@ For Gradle add the following line:
 
     compile "io.github.boukenijhuis:dynamic-version-url:0.0.3"
 
-Please check if the version in the dependency above is the latest version!
+Please check if the version in the dependency above is the latest version! This can be done over here: https://central.sonatype.com/artifact/io.github.boukenijhuis/dynamic-version-url.
 
 ## Change the version prefix string
 
