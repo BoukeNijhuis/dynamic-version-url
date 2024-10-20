@@ -1,8 +1,10 @@
 package io.github.boukenijhuis.dynamicversionurl;
 
+import io.github.boukenijhuis.dynamicversionurl.annotation.VersionMapping;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -33,18 +35,13 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
         RequestMappingInfo info = super.getMappingForMethod(method, handlerType);
 
         // find the first version mapping annotation
-        Annotation annotation = getFirstVersionAnnotation(method);
+        Annotation annotation = getFirstAnnotation(method, getClass().getPackageName());
 
         if (annotation != null) {
+            AnnotationValues annotationValues = getAnnotationValues(method, annotation);
 
-            Map<String, Object> annotationAttributes = AnnotationUtils.getAnnotationAttributes(annotation);
-            int[] versions = (int[]) annotationAttributes.get("versions");
-            String[] value = (String[]) annotationAttributes.get("value");
-            String[] path = (String[]) annotationAttributes.get("path");
-            path = returnValueOrPath(value, path);
-
-            if (info != null && versions != null) {
-                String[] versionPaths = updatePaths(info.getPatternValues(), versions, path, annotation.getClass());
+            if (info != null && annotationValues.versions() != null) {
+                String[] versionPaths = updatePaths(info.getPatternValues(), annotationValues, annotation.getClass());
                 // update the request mapping info
                 info = info.mutate().paths(versionPaths).build();
             }
@@ -55,15 +52,46 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
     }
 
     /**
-     * Find the first version annotation on a given method.
-     * @param method the method that is checked for the first version annotation
+     * Build an AnnotationValues object containing values for versions, value and path.
+     * @param method
+     * @param annotation
+     * @return
+     */
+    private AnnotationValues getAnnotationValues(Method method, Annotation annotation) {
+
+        Map<String, Object> versionAttributes = AnnotationUtils.getAnnotationAttributes(annotation);
+
+        // special case: VersionMapping
+        if (annotation.annotationType().equals(VersionMapping.class)) {
+            Annotation mappingAnnotation = getFirstAnnotation(method, GetMapping.class.getPackageName());
+            Map<String, Object> mappingAttributes = AnnotationUtils.getAnnotationAttributes(mappingAnnotation);
+
+            return AnnotationValues.of(
+                    versionAttributes.get("value"),
+                    mappingAttributes.get("value"),
+                    mappingAttributes.get("path")
+            );
+        } else {
+            return AnnotationValues.of(
+                    versionAttributes.get("versions"),
+                    versionAttributes.get("value"),
+                    versionAttributes.get("path")
+            );
+        }
+    }
+
+    /**
+     * Find the first version annotation whose package name start with a given string on a given method.
+     *
+     * @param method     the method that is checked for the first version annotation
+     * @param startsWith the package name of the annotation should start with
      * @return the first version annotation or null (when not found)
      */
-    private Annotation getFirstVersionAnnotation(Method method) {
+    private Annotation getFirstAnnotation(Method method, String startsWith) {
         Annotation[] declaredAnnotations = method.getDeclaredAnnotations();
         for (Annotation annotation : declaredAnnotations) {
             String packageName = annotation.annotationType().getPackageName();
-            if (packageName.startsWith(getClass().getPackageName())) {
+            if (packageName.startsWith(startsWith)) {
                 return annotation;
             }
         }
@@ -73,26 +101,16 @@ public class ApiVersionRequestMappingHandlerMapping extends RequestMappingHandle
     }
 
     /***
-     * Returns the path array if it contains values, otherwise it will return the value array.
-     * @param value the value array (from a RequestMapping)
-     * @param path the path array (from a RequestMapping)
-     * @return the path array if it contains values, otherwise the value array
-     */
-    private String[] returnValueOrPath(String[] value, String[] path) {
-        if (path != null && path.length > 0) {
-            return path;
-        } else return value;
-    }
-
-    /***
      * Calculates the dynamic URLs based upon exiting patternValues, versions and paths.
      * @param patternValues the existing patternValues calculated by Spring Boot.
-     * @param versions the versions (as specified by the annotation)
-     * @param paths the paths (as specified by the annotation)
+     * @param annotationValues the attribute values from the annotation
      * @param clazz the annotation where version and path were specified
      * @return the updated patternValues
      */
-    private String[] updatePaths(Set<String> patternValues, @NonNull int[] versions, @NonNull String[] paths, Class<? extends Annotation> clazz) {
+    private String[] updatePaths(Set<String> patternValues, AnnotationValues annotationValues, Class<? extends Annotation> clazz) {
+
+        int[] versions = annotationValues.versions();
+        String[] paths = annotationValues.path();
 
         List<String> versionedPaths = new ArrayList<>();
 

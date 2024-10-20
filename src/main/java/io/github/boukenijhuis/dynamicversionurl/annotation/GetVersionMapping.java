@@ -16,7 +16,6 @@ import java.lang.annotation.Target;
 @RequestMapping(
         method = {RequestMethod.GET}
 )
-//@VersionMapping(GetVersionMapping.class)
 public @interface GetVersionMapping {
 
     @AliasFor("versions")
